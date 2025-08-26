@@ -1,39 +1,64 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>AR Quick Look – BMD Models</title>
+  <title>BMD Models – View in AR</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+  <style>
+    body { text-align:center; font-family:sans-serif; margin:20px; background:#fafafa; }
+    h1 { margin-bottom:30px; }
+    .model-block { margin-bottom:50px; }
+    model-viewer { width: 300px; height: 300px; }
+    button[slot="ar-button"] {
+      margin-top:10px;
+      padding:10px 20px;
+      font-size:16px;
+      border:none;
+      border-radius:8px;
+      background:#0078d7;
+      color:white;
+      cursor:pointer;
+    }
+  </style>
 </head>
-<body style="text-align:center; font-family:sans-serif;">
-  <h1>Tap to View in AR</h1>
+<body>
+  <h1>Tap a model to view in AR</h1>
 
   <!-- Model 1: BMD 3 -->
-  <div style="margin-bottom: 40px;">
+  <div class="model-block">
     <h2>BMD 3</h2>
-    <a rel="ar" href="bmd3.usdz">
-      <img src="ICONS/BMD3_A.webp" width="300" alt="BMD3 Preview"><br>
-      Tap to view BMD3
-    </a>
+    <model-viewer src="bmd3.glb" ios-src="bmd3.usdz"
+      alt="BMD 3 Presetting Machine"
+      ar ar-modes="scene-viewer quick-look webxr"
+      camera-controls auto-rotate
+      poster="ICONS/BMD3_A.webp">
+      <button slot="ar-button">View BMD 3 in AR</button>
+    </model-viewer>
   </div>
 
   <!-- Model 2: BMD 5 -->
-  <div style="margin-bottom: 40px;">
+  <div class="model-block">
     <h2>BMD 5</h2>
-    <a rel="ar" href="bmd5.usdz">
-      <img src="ICONS/BMD5_A.webp" width="300" alt="BMD5 Preview"><br>
-      Tap to view BMD5
-    </a>
+    <model-viewer src="bmd5.glb" ios-src="bmd5.usdz"
+      alt="BMD 5 Presetting Machine"
+      ar ar-modes="scene-viewer quick-look webxr"
+      camera-controls auto-rotate
+      poster="ICONS/BMD5_A.webp">
+      <button slot="ar-button">View BMD 5 in AR</button>
+    </model-viewer>
   </div>
 
   <!-- Model 3: reBMD -->
-  <div>
+  <div class="model-block">
     <h2>reBMD</h2>
-    <a rel="ar" href="rebmd.usdz">
-      <img src="ICONS/REBMD_A.webp" width="300" alt="REBMD Preview"><br>
-      Tap to view reBMD
-    </a>
+    <model-viewer src="rebmd.glb" ios-src="rebmd.usdz"
+      alt="reBMD Presetting Machine"
+      ar ar-modes="scene-viewer quick-look webxr"
+      camera-controls auto-rotate
+      poster="ICONS/REBMD_A.webp">
+      <button slot="ar-button">View reBMD in AR</button>
+    </model-viewer>
   </div>
-
 </body>
 </html>
