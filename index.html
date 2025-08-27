@@ -35,55 +35,88 @@
     *{box-sizing:border-box}
     body{
       margin:0;
-      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Arial,sans-serif;
-      color:var(--text); background:var(--bg);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, sans-serif;
+      color:var(--text);
+      background:var(--bg);
     }
     header{
-      position:sticky; top:0; z-index:2; background:#fff;
+      position:sticky; top:0; z-index:2;
+      background:#fff;
       padding: clamp(12px, 2.5vw, 20px) var(--gap);
-      text-align:center; box-shadow: 0 1px 0 rgba(0,0,0,.04);
+      text-align:center;
+      box-shadow: 0 1px 0 rgba(0,0,0,.04);
     }
-    h1{ margin:0; font-size:clamp(1.1rem,2.2vw,1.8rem); font-weight:700; }
+    h1{
+      margin:0;
+      font-size: clamp(1.1rem, 2.2vw, 1.8rem);
+      font-weight: 700;
+    }
 
-    .wrap{ margin:0 auto; max-width:1600px; padding:var(--gap); }
-    .grid{
-      display:grid; gap:var(--gap); align-items:stretch;
-      grid-template-columns: repeat(auto-fit, minmax(var(--card-min),1fr));
+    .wrap{
+      margin: 0 auto;
+      max-width: 1600px;
+      padding: var(--gap);
     }
+    .grid{
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(var(--card-min), 1fr));
+      gap: var(--gap);
+      align-items: stretch;
+    }
+
     .card{
-      background:#fff; border-radius:var(--radius); box-shadow:var(--shadow);
-      padding: clamp(12px,2vw,18px); display:flex; flex-direction:column; gap:12px;
+      display:flex; flex-direction:column; gap:12px;
+      background:#fff; border-radius: var(--radius); box-shadow: var(--shadow);
+      padding: clamp(12px, 2vw, 18px);
     }
     .title{
-      text-align:center; margin:0; font-weight:600; color:var(--muted);
-      font-size: clamp(1rem,1.6vw,1.25rem);
+      text-align:center;
+      font-size: clamp(1rem, 1.6vw, 1.25rem);
+      margin: 0;
+      color: var(--muted);
+      font-weight:600;
     }
 
-    /* MEDIA — keep poster aspect ratio; AR badge overlaid in corner */
-    .media{ position:relative; }
+    /* MEDIA AREA — keep original aspect ratio, never crop */
+    .media{ display:block; }
     .poster{
-      display:block; width:100%; height:auto; object-fit:contain;
-      border-radius:10px; background:#fff;
+      display:block;
+      width:100%;
+      height:auto;              /* preserve original aspect ratio */
+      object-fit: contain;      /* never crop */
+      border-radius:10px;
+      background:#fff;
     }
     model-viewer{
-      width:100%; height:auto; display:block; border-radius:10px; --poster-color:#fff;
+      width:100%;
+      height:auto;              /* follow poster image height */
+      display:block;
+      --poster-color: #fff;
+      border-radius:10px;
     }
 
-    /* Corner AR cube overlay (one-tap) */
-    .ar-overlay{
-      position:absolute; right:12px; bottom:12px; z-index:1;
-      display:inline-flex; align-items:center; gap:8px;
-      padding:10px 12px; border-radius:12px;
-      background:rgba(10,102,255,.95); color:#fff; text-decoration:none;
-      box-shadow:0 2px 10px rgba(0,0,0,.18);
-      font-weight:700; font-size:14px;
+    .actions{
+      display:flex; gap: 10px; justify-content:center; flex-wrap:wrap; margin-top:6px;
     }
-    .ar-overlay svg{ width:20px; height:20px; display:block; }
-    @media (hover:hover){ .ar-overlay:hover{ filter:brightness(1.06); } }
+    .arbtn{
+      cursor:pointer;
+      border:none;
+      border-radius: 12px;
+      padding: clamp(10px, 1.4vw, 12px) clamp(14px, 2vw, 18px);
+      font-size: clamp(0.95rem, 1.3vw, 1rem);
+      background: var(--accent);
+      color:#fff;
+      box-shadow: 0 2px 8px rgba(10,102,255,.25);
+      text-decoration:none;
+      display:inline-flex; align-items:center; justify-content:center;
+    }
+    .ghost{
+      background:#eef3ff; color:#113274;
+    }
 
-    /* Platform logic */
-    .mv { display:block; }       /* non-iOS cards with <model-viewer> */
-    .iosonly { display:none; }   /* iOS cards with rel="ar" poster */
+    /* iOS stability: hide model-viewer cards, show rel="ar" cards */
+    .mv { display:block; }
+    .iosonly { display:none; }
     .ios .mv { display:none; }
     .ios .iosonly { display:block; }
 
@@ -99,159 +132,110 @@
   <main class="wrap">
     <section class="grid">
 
-      <!-- iOS SAFE: BMD 3 (poster + AR cube overlay) -->
-      <article class="card iosonly" data-glb="bmd3.glb" data-usdz="bmd3.usdz" data-title="BMD 3">
+      <!-- iOS-safe: BMD 3 -->
+      <article class="card iosonly">
         <h2 class="title">BMD 3</h2>
         <div class="media">
           <img class="poster" src="ICONS/BMD3_A.webp" alt="BMD 3 preview">
-          <a class="ar-overlay arlink" aria-label="Open BMD 3 in AR">
-            <!-- cube icon -->
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M12 2l9 5-9 5-9-5 9-5z"></path>
-              <path d="M3 7v10l9 5 9-5V7"></path>
-              <path d="M12 12v10"></path>
-            </svg>
-            <span>AR</span>
-          </a>
+        </div>
+        <div class="actions">
+          <a class="arbtn" rel="ar" href="bmd3.usdz">View in AR (iPhone/iPad)</a>
         </div>
       </article>
 
-      <!-- NON-iOS: BMD 3 (model-viewer + AR cube overlay) -->
-      <article class="card mv" data-glb="bmd3.glb" data-usdz="bmd3.usdz" data-title="BMD 3">
+      <!-- Non-iOS: BMD 3 -->
+      <article class="card mv">
         <h2 class="title">BMD 3</h2>
         <div class="media">
           <model-viewer
-            src="bmd3.glb" ios-src="bmd3.usdz"
+            src="bmd3.glb"
+            ios-src="bmd3.usdz"
             alt="BMD 3 Presetting Machine"
-            ar ar-modes="webxr scene-viewer quick-look"
-            camera-controls auto-rotate
-            loading="lazy" reveal="interaction">
+            ar
+            ar-modes="webxr scene-viewer quick-look"
+            camera-controls
+            auto-rotate
+            loading="lazy"
+            reveal="interaction">
+            <!-- Aspect-ratio-safe poster -->
             <img slot="poster" class="poster" src="ICONS/BMD3_A.webp" alt="BMD 3 preview">
+            <button class="arbtn" slot="ar-button">View in AR</button>
           </model-viewer>
-          <a class="ar-overlay arlink" aria-label="Open BMD 3 in AR">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M12 2l9 5-9 5-9-5 9-5z"></path>
-              <path d="M3 7v10l9 5 9-5V7"></path>
-              <path d="M12 12v10"></path>
-            </svg>
-            <span>AR</span>
-          </a>
+        </div>
+        <div class="actions">
+          <a class="arbtn ghost" href="viewer-3d-bmd3.html" target="_blank" rel="noopener">Open 3D (no AR)</a>
         </div>
       </article>
 
-      <!-- iOS SAFE: BMD 5 -->
-      <article class="card iosonly" data-glb="bmd5.glb" data-usdz="bmd5.usdz" data-title="BMD 5">
+      <!-- iOS-safe: BMD 5 -->
+      <article class="card iosonly">
         <h2 class="title">BMD 5</h2>
         <div class="media">
           <img class="poster" src="ICONS/BMD5_A.webp" alt="BMD 5 preview">
-          <a class="ar-overlay arlink" aria-label="Open BMD 5 in AR">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M12 2l9 5-9 5-9-5 9-5z"></path>
-              <path d="M3 7v10l9 5 9-5V7"></path>
-              <path d="M12 12v10"></path>
-            </svg>
-            <span>AR</span>
-          </a>
+        </div>
+        <div class="actions">
+          <a class="arbtn" rel="ar" href="bmd5.usdz">View in AR (iPhone/iPad)</a>
         </div>
       </article>
 
-      <!-- NON-iOS: BMD 5 -->
-      <article class="card mv" data-glb="bmd5.glb" data-usdz="bmd5.usdz" data-title="BMD 5">
+      <!-- Non-iOS: BMD 5 -->
+      <article class="card mv">
         <h2 class="title">BMD 5</h2>
         <div class="media">
           <model-viewer
-            src="bmd5.glb" ios-src="bmd5.usdz"
+            src="bmd5.glb"
+            ios-src="bmd5.usdz"
             alt="BMD 5 Presetting Machine"
-            ar ar-modes="webxr scene-viewer quick-look"
-            camera-controls auto-rotate
-            loading="lazy" reveal="interaction">
+            ar
+            ar-modes="webxr scene-viewer quick-look"
+            camera-controls
+            auto-rotate
+            loading="lazy"
+            reveal="interaction">
             <img slot="poster" class="poster" src="ICONS/BMD5_A.webp" alt="BMD 5 preview">
+            <button class="arbtn" slot="ar-button">View in AR</button>
           </model-viewer>
-          <a class="ar-overlay arlink" aria-label="Open BMD 5 in AR">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M12 2l9 5-9 5-9-5 9-5z"></path>
-              <path d="M3 7v10l9 5 9-5V7"></path>
-              <path d="M12 12v10"></path>
-            </svg>
-            <span>AR</span>
-          </a>
+        </div>
+        <div class="actions">
+          <a class="arbtn ghost" href="viewer-3d-bmd5.html" target="_blank" rel="noopener">Open 3D (no AR)</a>
         </div>
       </article>
 
-      <!-- iOS SAFE: reBMD -->
-      <article class="card iosonly" data-glb="rebmd.glb" data-usdz="rebmd.usdz" data-title="reBMD">
+      <!-- iOS-safe: reBMD -->
+      <article class="card iosonly">
         <h2 class="title">reBMD</h2>
         <div class="media">
           <img class="poster" src="ICONS/REBMD_A.webp" alt="reBMD preview">
-          <a class="ar-overlay arlink" aria-label="Open reBMD in AR">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M12 2l9 5-9 5-9-5 9-5z"></path>
-              <path d="M3 7v10l9 5 9-5V7"></path>
-              <path d="M12 12v10"></path>
-            </svg>
-            <span>AR</span>
-          </a>
+        </div>
+        <div class="actions">
+          <a class="arbtn" rel="ar" href="rebmd.usdz">View in AR (iPhone/iPad)</a>
         </div>
       </article>
 
-      <!-- NON-iOS: reBMD -->
-      <article class="card mv" data-glb="rebmd.glb" data-usdz="rebmd.usdz" data-title="reBMD">
+      <!-- Non-iOS: reBMD -->
+      <article class="card mv">
         <h2 class="title">reBMD</h2>
         <div class="media">
           <model-viewer
-            src="rebmd.glb" ios-src="rebmd.usdz"
+            src="rebmd.glb"
+            ios-src="rebmd.usdz"
             alt="reBMD Presetting Machine"
-            ar ar-modes="webxr scene-viewer quick-look"
-            camera-controls auto-rotate
-            loading="lazy" reveal="interaction">
+            ar
+            ar-modes="webxr scene-viewer quick-look"
+            camera-controls
+            auto-rotate
+            loading="lazy"
+            reveal="interaction">
             <img slot="poster" class="poster" src="ICONS/REBMD_A.webp" alt="reBMD preview">
+            <button class="arbtn" slot="ar-button">View in AR</button>
           </model-viewer>
-          <a class="ar-overlay arlink" aria-label="Open reBMD in AR">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M12 2l9 5-9 5-9-5 9-5z"></path>
-              <path d="M3 7v10l9 5 9-5V7"></path>
-              <path d="M12 12v10"></path>
-            </svg>
-            <span>AR</span>
-          </a>
+        </div>
+        <div class="actions">
+          <a class="arbtn ghost" href="viewer-3d-rebmd.html" target="_blank" rel="noopener">Open 3D (no AR)</a>
         </div>
       </article>
 
     </section>
   </main>
-
-  <!-- One-tap AR wiring -->
-  <script>
-    function abs(url){ return new URL(url, window.location.href).href; }
-    const ua = navigator.userAgent || navigator.vendor || window.opera;
-    const isIOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-    const isAndroid = /Android/i.test(ua);
-
-    document.querySelectorAll('.card').forEach(card=>{
-      const glb = card.dataset.glb;
-      const usdz = card.dataset.usdz;
-      const title = encodeURIComponent(card.dataset.title || 'Model');
-      let arURL = '#', rel = null;
-
-      if (isIOS && usdz){
-        arURL = abs(usdz); rel = 'ar';          // Quick Look
-      } else if (isAndroid && glb){
-        arURL = `https://arvr.google.com/scene-viewer/1.0?file=${encodeURIComponent(abs(glb))}&mode=ar_preferred&title=${title}`;
-      } else if (glb){
-        arURL = abs(glb);                       // desktop fallback
-      }
-
-      card.querySelectorAll('.arlink').forEach(a=>{
-        a.setAttribute('href', arURL);
-        if (rel) a.setAttribute('rel', rel);
-      });
-    });
-  </script>
 </body>
 </html>
