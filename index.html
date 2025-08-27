@@ -88,12 +88,14 @@
       background:#fff;
     }
     model-viewer{
-      width:100%;
-      height:auto;              /* follow poster image height */
-      display:block;
-      --poster-color: #fff;
-      border-radius:10px;
-    }
+  width:100%;
+  height: clamp(260px, 38vw, 420px);
+  display:block;
+  --poster-color:#fff;
+  border-radius:10px;
+  background:#fff;
+}
+
 
     .actions{
       display:flex; gap: 10px; justify-content:center; flex-wrap:wrap; margin-top:6px;
