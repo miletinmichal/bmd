@@ -25,7 +25,7 @@
     :root{
       --gap: clamp(12px, 2vw, 24px);
       --radius: 14px;
-      --card-min: min(32rem, 95vw); /* lets cards grow on desktop, shrink on phones */
+      --card-min: min(30rem, 95vw);
       --shadow: 0 2px 12px rgba(0,0,0,.08);
       --text: #0b0f1a;
       --muted: #5a6472;
@@ -41,89 +41,74 @@
     }
     header{
       position:sticky; top:0; z-index:2;
-      background:linear-gradient(#fff, #fff0);
+      background:#fff;
       padding: clamp(12px, 2.5vw, 20px) var(--gap);
       text-align:center;
-      backdrop-filter:saturate(1.2) blur(6px);
+      box-shadow: 0 1px 0 rgba(0,0,0,.04);
     }
-    h1{
-      margin:0;
-      font-size: clamp(1.1rem, 2.2vw, 1.8rem);
-      font-weight: 700;
-    }
+    h1{ margin:0; font-size: clamp(1.1rem, 2.2vw, 1.8rem); font-weight:700; }
 
-    /* Responsive grid that scales with window size */
-    .wrap{
-      margin: 0 auto;
-      max-width: 1600px;
-      padding: var(--gap);
-    }
+    .wrap{ margin:0 auto; max-width:1600px; padding:var(--gap); }
     .grid{
-      display: grid;
+      display:grid;
       grid-template-columns: repeat(auto-fit, minmax(var(--card-min), 1fr));
-      gap: var(--gap);
-      align-items: stretch;
+      gap:var(--gap);
+      align-items:stretch;
     }
 
-    /* Card layout scales; keeps consistent height without hard-coding */
     .card{
-      display:flex; flex-direction:column; justify-content:space-between;
-      min-height: clamp(260px, 32vw, 420px);
-      background:#fff; border-radius: var(--radius); box-shadow: var(--shadow);
+      position:relative;
+      display:flex; flex-direction:column; gap:12px;
+      background:#fff; border-radius:var(--radius); box-shadow:var(--shadow);
       padding: clamp(12px, 2vw, 18px);
     }
     .title{
-      text-align:center;
+      text-align:center; margin:0; font-weight:600; color:var(--muted);
       font-size: clamp(1rem, 1.6vw, 1.25rem);
-      margin: 0 0 8px 0;
-      color: var(--muted);
-      font-weight:600;
     }
 
-    /* Media area: posters or <model-viewer> fill width and keep aspect */
-    .media{
-      border-radius: 10px;
-      background: #fff;
-      display:grid; place-items:center;
-      overflow: hidden;
-      aspect-ratio: 16 / 9;   /* keeps a stable tile shape but scales with width */
-      margin-bottom: clamp(10px, 1.5vw, 14px);
-    }
+    /* MEDIA — keep poster aspect ratio (no cropping) */
+    .media{ display:block; }
     .poster{
-      width: 100%;
-      height: 100%;
-      object-fit: contain;     /* no cropping; scales nicely */
-      display:block;
+      display:block; width:100%; height:auto; object-fit:contain;
+      border-radius:10px; background:#fff;
     }
     model-viewer{
-      width:100%; height:100%; display:block;
-      --poster-color: #fff;
-      border-radius: 10px;
+      width:100%; height:auto; display:block;
+      --poster-color:#fff; border-radius:10px;
     }
 
-    /* Buttons scale with viewport */
-    .actions{
-      display:flex; gap: 10px; justify-content:center; flex-wrap:wrap;
-    }
+    /* Actions */
+    .actions{ display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:6px; }
     .arbtn{
-      cursor:pointer;
-      border:none;
-      border-radius: 12px;
+      cursor:pointer; border:none; border-radius:12px;
       padding: clamp(10px, 1.4vw, 12px) clamp(14px, 2vw, 18px);
       font-size: clamp(0.95rem, 1.3vw, 1rem);
-      background: var(--accent);
-      color:#fff;
-      box-shadow: 0 2px 8px rgba(10,102,255,.25);
+      background:var(--accent); color:#fff; text-decoration:none;
+      box-shadow:0 2px 8px rgba(10,102,255,.25);
+      display:inline-flex; align-items:center; justify-content:center;
     }
-    .ghost{
-      background:#eef3ff; color:#113274;
-    }
+    .ghost{ background:#eef3ff; color:#113274; }
 
-    /* iOS stability: hide model-viewer cards, show rel="ar" cards */
+    /* Platform logic */
     .mv { display:block; }
     .iosonly { display:none; }
     .ios .mv { display:none; }
     .ios .iosonly { display:block; }
+
+    /* Corner AR badge (one-tap AR) */
+    .ar-badge{
+      position:absolute; top:10px; right:10px; z-index:1;
+      display:inline-flex; align-items:center; justify-content:center;
+      width:40px; height:40px; border-radius:10px;
+      background:rgba(10,102,255,.95); color:#fff; text-decoration:none;
+      box-shadow:0 2px 8px rgba(0,0,0,.18);
+      font-weight:700; font-size:14px;
+    }
+    .ar-badge span{ transform: translateY(-1px); }
+    @media (hover:hover){
+      .ar-badge:hover{ filter:brightness(1.06); }
+    }
 
     @media (prefers-reduced-motion: reduce){
       model-viewer{ --auto-rotate: 0 }
@@ -137,19 +122,19 @@
   <main class="wrap">
     <section class="grid">
 
-      <!-- iOS-safe card -->
-      <article class="card iosonly">
+      <!-- iOS SAFE: BMD 3 -->
+      <article class="card iosonly" data-glb="bmd3.glb" data-usdz="bmd3.usdz" data-title="BMD 3">
+        <a class="ar-badge arlink" aria-label="Open in AR"><span>AR</span></a>
         <h2 class="title">BMD 3</h2>
-        <div class="media">
-          <img class="poster" src="ICONS/BMD3_A.webp" alt="BMD 3 preview">
-        </div>
+        <div class="media"><img class="poster" src="ICONS/BMD3_A.webp" alt="BMD 3 preview"></div>
         <div class="actions">
-          <a class="arbtn" rel="ar" href="bmd3.usdz">View in AR (iPhone/iPad)</a>
+          <a class="arbtn arlink">View in AR</a>
         </div>
       </article>
 
-      <!-- Android/Desktop card -->
-      <article class="card mv">
+      <!-- NON-iOS: BMD 3 -->
+      <article class="card mv" data-glb="bmd3.glb" data-usdz="bmd3.usdz" data-title="BMD 3">
+        <a class="ar-badge arlink" aria-label="Open in AR"><span>AR</span></a>
         <h2 class="title">BMD 3</h2>
         <div class="media">
           <model-viewer
@@ -160,9 +145,9 @@
             ar-modes="webxr scene-viewer quick-look"
             camera-controls
             auto-rotate
-            poster="ICONS/BMD3_A.webp"
             loading="lazy"
             reveal="interaction">
+            <img slot="poster" class="poster" src="ICONS/BMD3_A.webp" alt="BMD 3 preview">
             <button class="arbtn" slot="ar-button">View in AR</button>
           </model-viewer>
         </div>
@@ -171,19 +156,19 @@
         </div>
       </article>
 
-      <!-- iOS-safe card -->
-      <article class="card iosonly">
+      <!-- iOS SAFE: BMD 5 -->
+      <article class="card iosonly" data-glb="bmd5.glb" data-usdz="bmd5.usdz" data-title="BMD 5">
+        <a class="ar-badge arlink" aria-label="Open in AR"><span>AR</span></a>
         <h2 class="title">BMD 5</h2>
-        <div class="media">
-          <img class="poster" src="ICONS/BMD5_A.webp" alt="BMD 5 preview">
-        </div>
+        <div class="media"><img class="poster" src="ICONS/BMD5_A.webp" alt="BMD 5 preview"></div>
         <div class="actions">
-          <a class="arbtn" rel="ar" href="bmd5.usdz">View in AR (iPhone/iPad)</a>
+          <a class="arbtn arlink">View in AR</a>
         </div>
       </article>
 
-      <!-- Android/Desktop card -->
-      <article class="card mv">
+      <!-- NON-iOS: BMD 5 -->
+      <article class="card mv" data-glb="bmd5.glb" data-usdz="bmd5.usdz" data-title="BMD 5">
+        <a class="ar-badge arlink" aria-label="Open in AR"><span>AR</span></a>
         <h2 class="title">BMD 5</h2>
         <div class="media">
           <model-viewer
@@ -194,9 +179,9 @@
             ar-modes="webxr scene-viewer quick-look"
             camera-controls
             auto-rotate
-            poster="ICONS/BMD5_A.webp"
             loading="lazy"
             reveal="interaction">
+            <img slot="poster" class="poster" src="ICONS/BMD5_A.webp" alt="BMD 5 preview">
             <button class="arbtn" slot="ar-button">View in AR</button>
           </model-viewer>
         </div>
@@ -205,19 +190,19 @@
         </div>
       </article>
 
-      <!-- iOS-safe card -->
-      <article class="card iosonly">
+      <!-- iOS SAFE: reBMD -->
+      <article class="card iosonly" data-glb="rebmd.glb" data-usdz="rebmd.usdz" data-title="reBMD">
+        <a class="ar-badge arlink" aria-label="Open in AR"><span>AR</span></a>
         <h2 class="title">reBMD</h2>
-        <div class="media">
-          <img class="poster" src="ICONS/REBMD_A.webp" alt="reBMD preview">
-        </div>
+        <div class="media"><img class="poster" src="ICONS/REBMD_A.webp" alt="reBMD preview"></div>
         <div class="actions">
-          <a class="arbtn" rel="ar" href="rebmd.usdz">View in AR (iPhone/iPad)</a>
+          <a class="arbtn arlink">View in AR</a>
         </div>
       </article>
 
-      <!-- Android/Desktop card -->
-      <article class="card mv">
+      <!-- NON-iOS: reBMD -->
+      <article class="card mv" data-glb="rebmd.glb" data-usdz="rebmd.usdz" data-title="reBMD">
+        <a class="ar-badge arlink" aria-label="Open in AR"><span>AR</span></a>
         <h2 class="title">reBMD</h2>
         <div class="media">
           <model-viewer
@@ -228,9 +213,9 @@
             ar-modes="webxr scene-viewer quick-look"
             camera-controls
             auto-rotate
-            poster="ICONS/REBMD_A.webp"
             loading="lazy"
             reveal="interaction">
+            <img slot="poster" class="poster" src="ICONS/REBMD_A.webp" alt="reBMD preview">
             <button class="arbtn" slot="ar-button">View in AR</button>
           </model-viewer>
         </div>
@@ -241,5 +226,44 @@
 
     </section>
   </main>
+
+  <!-- One-tap AR links: iOS opens USDZ directly; Android opens Scene Viewer -->
+  <script>
+    // Build absolute URL for a relative asset
+    function abs(url){ return new URL(url, window.location.href).href; }
+
+    const ua = navigator.userAgent || navigator.vendor || window.opera;
+    const isIOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    const isAndroid = /Android/i.test(ua);
+
+    document.querySelectorAll('.card').forEach(card=>{
+      const glb = card.dataset.glb;
+      const usdz = card.dataset.usdz;
+      const title = encodeURIComponent(card.dataset.title || 'Model');
+
+      // Determine AR target URL for this platform
+      let arURL = '#';
+      let rel = null;
+
+      if (isIOS && usdz){
+        // Quick Look: direct USDZ
+        arURL = abs(usdz);
+        rel = 'ar';
+      } else if (isAndroid && glb){
+        // Scene Viewer: GLB, AR preferred
+        arURL = `https://arvr.google.com/scene-viewer/1.0?file=${encodeURIComponent(abs(glb))}&mode=ar_preferred&title=${title}`;
+      } else if (glb){
+        // Desktop fallback: just open GLB (download/viewer)
+        arURL = abs(glb);
+      }
+
+      // Wire all .arlink elements in this card
+      card.querySelectorAll('.arlink').forEach(a=>{
+        a.setAttribute('href', arURL);
+        if (rel){ a.setAttribute('rel', rel); }
+        a.setAttribute('target', isAndroid ? '_self' : '_self'); // keep in same tab
+      });
+    });
+  </script>
 </body>
 </html>
